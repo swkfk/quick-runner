@@ -34,33 +34,26 @@ For Windows, you may need to set the program to the `%PATH%` manually.
 ## Usage
 
 ``` bash
-runner [--version] [--help] SOURCES [OPTIONS] [--] [ARGS]
+./runner [options] source-files [--] [args]
 ```
 
-### `--version`
+- options:
 
-[Unsupported nowadays.]
+  `-V`,` --version`    Show the version information and exit.
 
-### `--help`
+  `-?`, `--help`       Show the help message and exit.
 
-[Unsupported nowadays.]
+- source-files:
 
-### SOURCES
+  The lists of the source files
 
-The source files to be run.
+- -- args:
 
-### OPITIONS
+  Everything after the `--` will be passed to the program.
 
-[Unsupported nowadays.]
+## Third-Party License
 
-### `--`
-
-[Unsupported nowadays.]
-
-A `--` means the end of the commands and the args left will be passed to the program.
-
-### ARGS
-
-[Unsupported nowadays.]
-
-The args to be pass to the program. Before the ARGS, a `--` is needed.
+- cmdline.h
+  - By: Hideyuki Tanaka
+  - License: BSD-3-Clause license
+  - Detail: ./Third-Party-License/cmdline/LICENSE

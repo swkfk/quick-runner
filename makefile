@@ -9,8 +9,8 @@ OBJ := $(patsubst %.cpp,%.o,${SRC})
 ${OUT}: ${OBJ}
 	${CXX} ${CXXFLAG} -o $@ ${OBJ}
 
-%.o: %.c
-	${CC} ${CFLAG} -c -o $@ $<
+%.o: %.cpp
+	${CXX} ${CXXFLAG} -c -o $@ $<
 
 clean:
 	rm -f *.o ${OUT}
