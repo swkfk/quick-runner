@@ -15,7 +15,7 @@ const std::string complier = "clang++";
 #elif defined(__GNUC__)
 const std::string complier = "g++";
 #elif defined(__BORLANDC__)
-const std::string complier = "g++";
+const std::string complier = "borland c++";
 #else
 const std::string complier = "unknown";
 #endif
