@@ -7,15 +7,16 @@
 #include <vector>
 
 int main(int argc, char *argv[]) {
-    std::cout << "[[In early development stage!]]" << std::endl;
 
     // register the argument parser
     cmdline::parser parser;
     parser.add("help", '?', "Show this help message and exit.");
     parser.add("version", 'V', "Show the version information and exit.");
     parser.add<std::string>(
-        "compiler", 'c', "Choose the compiler. If given \"auto\", the usable and suitable compiler will be chosen.",
+        "compiler", 'c', "Choose the compiler. If \"auto\" is given, the usable and suitable compiler will be chosen.",
         false, "auto", cmdline::oneof<std::string>("gcc", "clang", "g++", "clang++", "auto", "233"));
+    parser.add("time-limit", 't', "Limit the run time of the program. If `0` is given, there will be no limits.", false,
+               0, cmdline::range_reader<int>(0, 1000));
 
     parser.footer("source-files [--] [args]");
     parser.set_program_name("runner");
@@ -60,9 +61,12 @@ int main(int argc, char *argv[]) {
         args.push_back(argv[i]);
     }
 
+    // get the options
+    int time_limit = parser.get<int>("time-limit");
+
     // read the compiler flags
-    // TODO
     std::vector<std::string> c_flags;
+    // TODO
 
     // check and detect the compiler
     std::string c_compiler = parser.get<std::string>("compiler");
@@ -86,14 +90,23 @@ int main(int argc, char *argv[]) {
     }
 
     // run the program and remove the file
-    int ret_run = program::run(args);
+    int exit_code = program::run(args, time_limit);
     // TODO: remove or keep, check the status
     remove("./a.out");
-    if (ret_run) {
+    if (exit_code) {
         // TODO: error
-        std::cerr << "Runtime Error! The return value is " << ret_run << std::endl;
+        int ret_value = (exit_code >> 8) & 0xFF;
+        int ret_sig   = exit_code & 0x7F;
+        std::cerr << "Runtime Error!" << std::endl;
+        if (ret_value) {
+            std::cerr << "/ Return value: " << ret_value << std::endl;
+        }
+        if (ret_sig) {
+            std::cerr << "/ Return signal: " << ret_sig << std::endl;
+        }
         return 1;
     }
+    std::cout << "The program exits successfully!" << std::endl;
 
     return 0;
 }

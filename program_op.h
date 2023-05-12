@@ -6,7 +6,7 @@
 
 namespace program {
 
-int run(const std::vector<std::string> &args);
+int run(const std::vector<std::string> &args, int time_limit);
 
 } // namespace program
 

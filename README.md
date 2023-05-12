@@ -4,14 +4,9 @@
 
 A simple and quick C/C++ runner. It is more a piece of script than a program.
 
-The runner **does not** provide a compiler. But it can detect the `gcc/g++` or `clang/clang++` installed by you and use them autometically (**In later version**).
+The runner **does not** provide a compiler. But it can detect the `gcc/g++` or `clang/clang++` installed by you and use them autometically.
 
-## Functions
-
-- [x] Complie and run the specified source file.
-- [ ] Provide a simple way to redirect the `stdin`.
-- [ ] Detect the latest source file and run it.
-- [ ] Detect the existed compiler.
+I also provide some useful options to run the program, such as "time-limit".
 
 ## Install
 
@@ -31,7 +26,9 @@ make install
 
 to make the program can be called globally.
 
-For Windows, you can also use `git clone` to get the source file and build it with `make` or other compiler. But you may need to set the program to the `%PATH%` manually.
+~~For Windows, you can also use `git clone` to get the source file and build it with `make` or other compiler. But you may need to set the program to the `%PATH%` manually.~~
+
+It is a pity that, it is hard to supprot Windows now, because I use some Unix functions in this project. I will learn the Windows Programming if I were free to make it work on Windows.
 
 ## Usage
 
@@ -43,11 +40,15 @@ runner [options] source-files [--] [args]
 
   - `-V`,` --version`    Show the version information and exit.
   - `-?`, `--help`       Show the help message and exit.
-  - `-c`, `--compiler`   Choose the compiler. If given "auto", the usable and suitable compiler will be chosen (This version will use `gcc` by default).
+  - `-c`, `--compiler`   Choose the compiler. If `auto` is given, the usable and suitable compiler will be chosen (This version will use `gcc` by default).
     - Need a string parameter to specify the compiler.
     - The choices are: `gcc`, `g++`, `clang`, `clang++`, `auto`(dufault).
     - If the compiler is not found, the program will exit with an error.
     - To **add a parameter**, you can use `-c gcc` or `--compiler g++` or `--compiler=clang`. The following options that need parameters have the same behavior.
+  - `-t`, `--time-limit`    Limit the run time of the program. If `0` is given, there will be no limits.
+    - Need an int parameter to specify the time limit.
+    - The program will be killed with the `SIGALRM(14)` if TLE.
+    - Pay attention that, the input time will be calulated in the total time.
 
 - source-files:
 
@@ -59,11 +60,17 @@ runner [options] source-files [--] [args]
 
 ## What's new
 
+### [early] v0.0.3
+
+The program now use `fork` to run the program and can get the return value of the program. Press `Ctrl+C` to make an interruption to kill the program with `SIGKILL(9)`.
+
+Add the `--time-limit` or `-t` option to limit the run time of the program.
+
 ### [early] v0.0.2
 
 The program can now compile the sources and run it! The binary will be removed after running.
 
-Add the `--conpiler` option to specify the compiler. Now the program has the ability to check whether the compiler specified by the user is available.
+Add the `--conpiler` or `-c` option to specify the compiler. Now the program has the ability to check whether the compiler specified by the user is available.
 
 ### [early] v0.0.1
 
