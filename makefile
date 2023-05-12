@@ -13,7 +13,7 @@ ${OUT}: ${OBJ}
 	${CXX} ${CXXFLAG} -c -o $@ $<
 
 clean:
-	rm -f *.o ${OUT}
+	rm -f *.o *.out ${OUT}
 
 install: ${OUT}
 	sudo cp ${OUT} /usr/bin/${OUT}
