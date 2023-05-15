@@ -39,6 +39,19 @@ int run(const std::vector<std::string> &args, int time_limit, const std::string 
         cmd += " \"" + s + "\"";
     }
 
+    bool has_input = input != "";
+
+    // child to parent or parent to child
+    // if `input` is specified, the fd_ptc will be used to fetch the file content
+    // at any situation, the fd_ctp will be used
+    int fd_ptc[2], fd_ctp[2];
+
+    if (has_input) {
+        if (~pipe(fd_ptc)) {
+            // TODO: pipe error
+        }
+    }
+
     int pid = fork();
     if (pid < 0) {
         // TODO: fork error
@@ -48,7 +61,21 @@ int run(const std::vector<std::string> &args, int time_limit, const std::string 
         child_pid = pid;
         signal(SIGCHLD, sigchld_handler);
         signal(SIGINT, sigint_handler);
+
+        if (has_input) {
+            close(fd_ptc[0]);
+            FILE *fp = fopen(input.c_str(), "rb");
+            char  chrs[BUFSIZ];
+            int   sze_read;
+            while ((sze_read = fread(chrs, sizeof(char), BUFSIZ, fp)) != 0) {
+                write(fd_ptc[1], chrs, sze_read);
+            }
+            fclose(fp);
+            close(fd_ptc[1]);
+        }
+
         unsigned int msec = 0;
+
         while (1) {
             usleep(100000);
 
@@ -68,7 +95,18 @@ int run(const std::vector<std::string> &args, int time_limit, const std::string 
         }
     } else {
         // child
+        // close(fd_ctp[0]);
+        if (has_input) {
+            close(fd_ptc[1]);
+            dup2(fd_ptc[0], STDIN_FILENO);
+        }
+        // dup2(fd_ctp[1], STDOUT_FILENO);
+
         int ret = system(cmd.c_str());
+
+        if (has_input) {
+            close(fd_ptc[0]);
+        }
         exit((ret >> 8) & 0xFF);
     }
 }

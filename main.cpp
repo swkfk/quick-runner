@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
         false, "auto", cmdline::oneof<std::string>("gcc", "clang", "g++", "clang++", "auto", "233"));
     parser.add("time-limit", 't', "Limit the run time of the program. If `0` is given, there will be no limits.", false,
                0, cmdline::range_reader<int>(0, 1000));
-    parser.add<std::string>("input", 'i', "To specify the file to replace the stdin of the program.");
+    parser.add<std::string>("input", 'i', "To specify the file to replace the stdin of the program.", false, "");
     parser.add("keep", 'k', "Keep the binary file after running it instead of deleting it.");
 
     parser.footer("source-files [--] [args]");

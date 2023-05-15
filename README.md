@@ -48,7 +48,7 @@ runner [options] source-files [--] [args]
   - `-t`, `--time-limit`    Limit the run time of your program. If `0` is given, there will be no limits.
     - Need an int parameter to specify the time limit.
     - Your program will be killed with the `SIGALRM(14)` if TLE.
-    - Pay attention that, the input time will be calulated in the total time.
+    - Pay attention that, the input time will be calulated in the total time. So it's better to use this option with the `--input`.
   - `-i`, `--input`         To specify the file to replace the stdin of your program.
     - Need a string parameter to specify the input file. If the file does not exist, the program will exit with an error.
   - `-k`, `--keep`          If this option exists, the binary file generated will be kept after running it instead of deleting it.
