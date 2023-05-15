@@ -4,7 +4,7 @@
 #include <string>
 
 namespace baseinfo {
-const std::string version    = "0.0.3";
+const std::string version    = "0.0.4";
 const std::string bulit_date = __DATE__;
 const std::string bulit_time = __TIME__;
 

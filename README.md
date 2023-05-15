@@ -63,6 +63,14 @@ runner [options] source-files [--] [args]
 
 ## What's new
 
+### [early] v0.0.4
+
+Add the `--input` or `-i` option to specify the file whose content will be send to your program. In this version, the program will not check the existence of the input file.
+
+Add the `--keep` or `-k` option. If this option exists, the binary generated will not be removed after running it.
+
+The program now use `pipe` to send data to your program if `--input` is specified.
+
 ### [early] v0.0.3
 
 The program now use `fork` to run the program and can get the return value of the program. Press `Ctrl+C` to make an interruption to kill your program with `SIGKILL(9)`.
