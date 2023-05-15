@@ -45,10 +45,13 @@ runner [options] source-files [--] [args]
     - The choices are: `gcc`, `g++`, `clang`, `clang++`, `auto`(dufault).
     - If the compiler is not found, the program will exit with an error.
     - To **add a parameter**, you can use `-c gcc` or `--compiler g++` or `--compiler=clang`. The following options that need parameters have the same behavior.
-  - `-t`, `--time-limit`    Limit the run time of the program. If `0` is given, there will be no limits.
+  - `-t`, `--time-limit`    Limit the run time of your program. If `0` is given, there will be no limits.
     - Need an int parameter to specify the time limit.
-    - The program will be killed with the `SIGALRM(14)` if TLE.
+    - Your program will be killed with the `SIGALRM(14)` if TLE.
     - Pay attention that, the input time will be calulated in the total time.
+  - `-i`, `--input`         To specify the file to replace the stdin of your program.
+    - Need a string parameter to specify the input file. If the file does not exist, the program will exit with an error.
+  - `-k`, `--keep`          If this option exists, the binary file generated will be kept after running it instead of deleting it.
 
 - source-files:
 
@@ -62,15 +65,15 @@ runner [options] source-files [--] [args]
 
 ### [early] v0.0.3
 
-The program now use `fork` to run the program and can get the return value of the program. Press `Ctrl+C` to make an interruption to kill the program with `SIGKILL(9)`.
+The program now use `fork` to run the program and can get the return value of the program. Press `Ctrl+C` to make an interruption to kill your program with `SIGKILL(9)`.
 
-Add the `--time-limit` or `-t` option to limit the run time of the program.
+Add the `--time-limit` or `-t` option to limit the run time of your program.
 
 ### [early] v0.0.2
 
 The program can now compile the sources and run it! The binary will be removed after running.
 
-Add the `--conpiler` or `-c` option to specify the compiler. Now the program has the ability to check whether the compiler specified by the user is available.
+Add the `--compiler` or `-c` option to specify the compiler. Now the program has the ability to check whether the compiler specified by the user is available.
 
 ### [early] v0.0.1
 

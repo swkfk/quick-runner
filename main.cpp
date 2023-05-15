@@ -17,6 +17,8 @@ int main(int argc, char *argv[]) {
         false, "auto", cmdline::oneof<std::string>("gcc", "clang", "g++", "clang++", "auto", "233"));
     parser.add("time-limit", 't', "Limit the run time of the program. If `0` is given, there will be no limits.", false,
                0, cmdline::range_reader<int>(0, 1000));
+    parser.add<std::string>("input", 'i', "To specify the file to replace the stdin of the program.");
+    parser.add("keep", 'k', "Keep the binary file after running it instead of deleting it.");
 
     parser.footer("source-files [--] [args]");
     parser.set_program_name("runner");
@@ -62,7 +64,9 @@ int main(int argc, char *argv[]) {
     }
 
     // get the options
-    int time_limit = parser.get<int>("time-limit");
+    int         option_time_limit = parser.get<int>("time-limit");
+    bool        option_keep       = parser.exist("keep");
+    std::string option_input      = parser.exist("input") ? parser.get<std::string>("input") : "";
 
     // read the compiler flags
     std::vector<std::string> c_flags;
@@ -90,9 +94,12 @@ int main(int argc, char *argv[]) {
     }
 
     // run the program and remove the file
-    int exit_code = program::run(args, time_limit);
-    // TODO: remove or keep, check the status
-    remove("./a.out");
+    int exit_code = program::run(args, option_time_limit, option_input);
+
+    if (!option_keep) {
+        remove("./a.out");
+    }
+
     if (exit_code) {
         // TODO: error
         int ret_value = (exit_code >> 8) & 0xFF;

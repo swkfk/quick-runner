@@ -32,7 +32,7 @@ void sigint_handler(int sig) {
 
 namespace program {
 
-int run(const std::vector<std::string> &args, int time_limit) {
+int run(const std::vector<std::string> &args, int time_limit, const std::string &input) {
     // TODO: modify the exec name
     std::string cmd = "./a.out";
     for (auto &s : args) {
