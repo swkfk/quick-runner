@@ -19,6 +19,7 @@ int main(int argc, char *argv[]) {
                0, cmdline::range_reader<int>(0, 1000));
     parser.add<std::string>("input", 'i', "To specify the file to replace the stdin of the program.", false, "");
     parser.add("keep", 'k', "Keep the binary file after running it instead of deleting it.");
+    parser.add("debug", 'd', "Enable the macro `DEBUG` for your program.");
 
     parser.footer("source-files [--] [args]");
     parser.set_program_name("runner");
@@ -64,12 +65,16 @@ int main(int argc, char *argv[]) {
     }
 
     // get the options
-    int         option_time_limit = parser.get<int>("time-limit");
-    bool        option_keep       = parser.exist("keep");
-    std::string option_input      = parser.exist("input") ? parser.get<std::string>("input") : "";
+    int option_time_limit = parser.get<int>("time-limit");
+    bool option_keep = parser.exist("keep");
+    std::string option_input = parser.exist("input") ? parser.get<std::string>("input") : "";
+    bool debug_enable = parser.exist("debug");
 
     // read the compiler flags
     std::vector<std::string> c_flags;
+    if (debug_enable) {
+        c_flags.push_back("-DDEBUG");
+    }
     // TODO
 
     // check and detect the compiler
@@ -103,7 +108,7 @@ int main(int argc, char *argv[]) {
     if (exit_code) {
         // TODO: error
         int ret_value = (exit_code >> 8) & 0xFF;
-        int ret_sig   = exit_code & 0x7F;
+        int ret_sig = exit_code & 0x7F;
         std::cerr << "Runtime Error!" << std::endl;
         if (ret_value) {
             std::cerr << "/ Return value: " << ret_value << std::endl;
