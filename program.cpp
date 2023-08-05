@@ -1,4 +1,4 @@
-#include "program_op.h"
+#include "program.h"
 
 #include <iostream>
 #include <signal.h>
@@ -65,8 +65,8 @@ int run(const std::vector<std::string> &args, int time_limit, const std::string 
         if (has_input) {
             close(fd_ptc[0]);
             FILE *fp = fopen(input.c_str(), "rb");
-            char  chrs[BUFSIZ];
-            int   sze_read;
+            char chrs[BUFSIZ];
+            int sze_read;
             while ((sze_read = fread(chrs, sizeof(char), BUFSIZ, fp)) != 0) {
                 write(fd_ptc[1], chrs, sze_read);
             }

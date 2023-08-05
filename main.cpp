@@ -1,7 +1,7 @@
 #include "baseinfo.h"
 #include "cmdline.h"
-#include "compiler_op.h"
-#include "program_op.h"
+#include "compiler.h"
+#include "program.h"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -10,16 +10,32 @@ int main(int argc, char *argv[]) {
 
     // register the argument parser
     cmdline::parser parser;
+
+    // arg: --help / -?  !![exit]
     parser.add("help", '?', "Show this help message and exit.");
+
+    // arg: --version / -V  !![exit]
     parser.add("version", 'V', "Show the version information and exit.");
+
+    // arg: --compiler / -c  parameter: string, @option{gcc | clang | g++ | clang++ | {auto}}
     parser.add<std::string>(
-        "compiler", 'c', "Choose the compiler. If \"auto\" is given, the usable and suitable compiler will be chosen.",
-        false, "auto", cmdline::oneof<std::string>("gcc", "clang", "g++", "clang++", "auto", "233"));
-    parser.add("time-limit", 't', "Limit the run time of the program. If `0` is given, there will be no limits.", false,
-               0, cmdline::range_reader<int>(0, 1000));
+        "compiler", 'c',
+        "Choose the compiler. If `auto`(default) is given, the usable and suitable compiler will be chosen.", false,
+        "auto", cmdline::oneof<std::string>("gcc", "clang", "g++", "clang++", "auto"));
+
+    // arg: --time-limit / --t  parameter: int, @range(0, 1000)
+    parser.add("time-limit", 't',
+               "Limit the run time of the program. If `0`(default) is given, there will be no limits.", false, 0,
+               cmdline::range_reader<int>(0, 1000));
+
+    // arg: --input / -i  parameter: string, @[-f $1] == true
     parser.add<std::string>("input", 'i', "To specify the file to replace the stdin of the program.", false, "");
-    parser.add("keep", 'k', "Keep the binary file after running it instead of deleting it.");
-    parser.add("debug", 'd', "Enable the macro `DEBUG` for your program.");
+
+    // arg: --keep / -k
+    parser.add("keep", 'k', "Keep the binary file after running it instead of deleting it. (Not by default)");
+
+    // arg: --debug / -d
+    parser.add("debug", 'd', "Enable the macro `DEBUG` for your program. (Not by default)");
 
     parser.footer("source-files [--] [args]");
     parser.set_program_name("runner");
@@ -44,7 +60,8 @@ int main(int argc, char *argv[]) {
 
     // `--version` => exit
     if (parser.exist("version")) {
-        std::cout << "C/C++ Quick Runner " << std::endl;
+        std::cout << "C/C++ Quick Runner (visit https://swkfk.top/jump/manual-runner for more information)"
+                  << std::endl;
         std::cout << "Version: " << baseinfo::version << std::endl;
         std::cout << "Built at " << baseinfo::bulit_time << " " << baseinfo::bulit_date;
         std::cout << " By " << baseinfo::compiler << std::endl;
@@ -80,7 +97,7 @@ int main(int argc, char *argv[]) {
     // check and detect the compiler
     std::string c_compiler = parser.get<std::string>("compiler");
     if (c_compiler != "auto") {
-        if (!compiler::exist(c_compiler)) {
+        if (!compile::exist(c_compiler)) {
             // TODO: error
             std::cerr << "Compiler " << c_compiler << " not exists!" << std::endl;
             return 1;
@@ -91,7 +108,7 @@ int main(int argc, char *argv[]) {
     }
 
     // compile
-    bool ret_compile = compiler::compile(sources, c_flags, c_compiler);
+    bool ret_compile = compile::compile(sources, c_flags, c_compiler);
     if (!ret_compile) {
         // TODO: error
         std::cerr << "Compile Error!" << std::endl;
@@ -106,9 +123,10 @@ int main(int argc, char *argv[]) {
     }
 
     if (exit_code) {
-        // TODO: error
+        // for linux
         int ret_value = (exit_code >> 8) & 0xFF;
         int ret_sig = exit_code & 0x7F;
+        // TODO: error
         std::cerr << "Runtime Error!" << std::endl;
         if (ret_value) {
             std::cerr << "/ Return value: " << ret_value << std::endl;

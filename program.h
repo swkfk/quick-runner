@@ -1,5 +1,5 @@
-#ifndef __PROGRAM_OP_H__
-#define __PROGRAM_OP_H__
+#ifndef __PROGRAM_H__
+#define __PROGRAM_H__
 
 #include <string>
 #include <vector>

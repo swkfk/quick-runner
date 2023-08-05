@@ -1,6 +1,6 @@
-#include "compiler_op.h"
+#include "compiler.h"
 
-namespace compiler::pipe {
+namespace compile::pipe {
 
 FILE *open(const char *cmd, const char *modes = "r") {
     FILE *pipe = popen(cmd, modes);
@@ -49,9 +49,9 @@ int close(FILE *pipe) {
     return ret;
 }
 
-} // namespace compiler::pipe
+} // namespace compile::pipe
 
-namespace compiler {
+namespace compile {
 
 bool exist(const std::string &id) {
     FILE *pipe = pipe::open(id + " --version 2>&1");
@@ -74,9 +74,9 @@ bool exist(const std::string &id, std::string &version) {
 }
 
 bool compile(const std::vector<std::string> &inputs, const std::vector<std::string> &flags,
-             const std::string &compiler) {
+             const std::string &compile) {
 
-    std::string cmd = compiler;
+    std::string cmd = compile;
     for (auto &s : inputs) {
         cmd += " " + s;
     }
@@ -84,7 +84,7 @@ bool compile(const std::vector<std::string> &inputs, const std::vector<std::stri
         cmd += " " + s;
     }
 
-    FILE *pipe = compiler::pipe::open(cmd + " 2>&1", "w");
+    FILE *pipe = compile::pipe::open(cmd + " 2>&1", "w");
     if (!pipe) {
         return false;
     }
@@ -93,4 +93,4 @@ bool compile(const std::vector<std::string> &inputs, const std::vector<std::stri
     return WIFEXITED(ret) && !WEXITSTATUS(ret);
 }
 
-} // namespace compiler
+} // namespace compile

@@ -96,4 +96,4 @@ The `--help` and `--version` are available now. The program starts to use `cmdli
 - cmdline.h
   - By: Hideyuki Tanaka
   - License: BSD-3-Clause license
-  - Detail: ./Third-Party-License/cmdline/LICENSE
+  - Detail: ThirdPartyLicense/cmdline/LICENSE

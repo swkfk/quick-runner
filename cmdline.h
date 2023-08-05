@@ -46,7 +46,7 @@ namespace detail {
 template <typename Target, typename Source, bool Same> class lexical_cast_t {
   public:
     static Target cast(const Source &arg) {
-        Target            ret;
+        Target ret;
         std::stringstream ss;
         if (!(ss << arg && ss >> ret && ss.eof()))
             throw std::bad_cast();
@@ -74,7 +74,7 @@ template <typename Source> class lexical_cast_t<std::string, Source, false> {
 template <typename Target> class lexical_cast_t<Target, std::string, false> {
   public:
     static Target cast(const std::string &arg) {
-        Target             ret;
+        Target ret;
         std::istringstream ss(arg);
         if (!(ss >> ret && ss.eof()))
             throw std::bad_cast();
@@ -91,8 +91,8 @@ template <typename Target, typename Source> Target lexical_cast(const Source &ar
 }
 
 static inline std::string demangle(const std::string &name) {
-    int         status = 0;
-    char       *p      = abi::__cxa_demangle(name.c_str(), 0, 0, &status);
+    int status = 0;
+    char *p = abi::__cxa_demangle(name.c_str(), 0, 0, &status);
     std::string ret(p);
     free(p);
     return ret;
@@ -339,7 +339,7 @@ class parser {
         std::vector<std::string> args;
 
         std::string buf;
-        bool        in_quote = false;
+        bool in_quote = false;
         for (std::string::size_type i = 0; i < arg.length(); i++) {
             if (arg[i] == '\"') {
                 in_quote = !in_quote;
@@ -378,7 +378,7 @@ class parser {
     }
 
     bool parse(const std::vector<std::string> &args) {
-        int                       argc = static_cast<int>(args.size());
+        int argc = static_cast<int>(args.size());
         std::vector<const char *> argv(argc);
 
         for (int i = 0; i < argc; i++)
@@ -587,17 +587,17 @@ class parser {
         virtual ~option_base() {
         }
 
-        virtual bool has_value() const             = 0;
-        virtual bool set()                         = 0;
+        virtual bool has_value() const = 0;
+        virtual bool set() = 0;
         virtual bool set(const std::string &value) = 0;
-        virtual bool has_set() const               = 0;
-        virtual bool valid() const                 = 0;
-        virtual bool must() const                  = 0;
+        virtual bool has_set() const = 0;
+        virtual bool valid() const = 0;
+        virtual bool must() const = 0;
 
-        virtual const std::string &name() const              = 0;
-        virtual char               short_name() const        = 0;
-        virtual const std::string &description() const       = 0;
-        virtual std::string        short_description() const = 0;
+        virtual const std::string &name() const = 0;
+        virtual char short_name() const = 0;
+        virtual const std::string &description() const = 0;
+        virtual std::string short_description() const = 0;
     };
 
     class option_without_value : public option_base {
@@ -654,9 +654,9 @@ class parser {
 
       private:
         std::string nam;
-        char        snam;
+        char snam;
         std::string desc;
-        bool        has;
+        bool has;
     };
 
     template <class T> class option_with_value : public option_base {
@@ -688,7 +688,7 @@ class parser {
         bool set(const std::string &value) {
             try {
                 actual = read(value);
-                has    = true;
+                has = true;
             } catch (const std::exception &e) {
                 return false;
             }
@@ -727,20 +727,21 @@ class parser {
 
       protected:
         std::string full_description(const std::string &desc) {
-            return desc + " (" + detail::readable_typename<T>() +
-                   (need ? "" : " [=" + detail::default_value<T>(def) + "]") + ")";
+            return desc /* + " (" + detail::readable_typename<T>() +
+                    (need ? "" : " [=" + detail::default_value<T>(def) + "]") + ")"*/
+                ;
         }
 
         virtual T read(const std::string &s) = 0;
 
         std::string nam;
-        char        snam;
-        bool        need;
+        char snam;
+        bool need;
         std::string desc;
 
         bool has;
-        T    def;
-        T    actual;
+        T def;
+        T actual;
     };
 
     template <class T, class F> class option_with_value_with_reader : public option_with_value<T> {
@@ -760,10 +761,10 @@ class parser {
     };
 
     std::map<std::string, option_base *> options;
-    std::vector<option_base *>           ordered;
-    std::string                          ftr;
+    std::vector<option_base *> ordered;
+    std::string ftr;
 
-    std::string              prog_name;
+    std::string prog_name;
     std::vector<std::string> others;
 
     std::vector<std::string> errors;

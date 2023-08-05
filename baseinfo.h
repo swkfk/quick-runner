@@ -4,18 +4,16 @@
 #include <string>
 
 namespace baseinfo {
-const std::string version    = "0.0.5";
+const std::string version = "0.0.6";
 const std::string bulit_date = __DATE__;
 const std::string bulit_time = __TIME__;
 
 #if defined(_MSC_VER)
 const std::string compiler = "MSVC";
 #elif defined(__clang__)
-const std::string compiler = "clang++";
+const std::string compiler = "LLVM clang++";
 #elif defined(__GNUC__)
-const std::string compiler = "g++";
-#elif defined(__BORLANDC__)
-const std::string compiler = "borland c++";
+const std::string compiler = "GNU g++";
 #else
 const std::string compiler = "unknown";
 #endif
