@@ -1,6 +1,6 @@
 # C/C++ Quick Runner [In early development stage]
 
-**Released: 2023/05/12**
+**Released: 2023/08/05**
 
 A simple and quick C/C++ runner. It is more a piece of script than a program.
 
@@ -53,6 +53,7 @@ runner [options] source-files [--] [args]
     - Need a string parameter to specify the input file. If the file does not exist, the program will exit with an error.
   - `-k`, `--keep`          If this option exists, the binary file generated will be kept after running it instead of deleting it.
   - `-d`, `--debug`         Enable the macro `DEBUG` for your program.
+  - `--no-color`            Dismiss the colorful output.
 - source-files:
 
   The lists of the source files
@@ -62,6 +63,10 @@ runner [options] source-files [--] [args]
   Everything after the `--` will be passed to the program.
 
 ## What's new
+
+### [early] v0.0.6
+
+Now the output will be colorful! But you can also change to the "no-color" mode by the `--no-color` option.
 
 ### [early] v0.0.5
 

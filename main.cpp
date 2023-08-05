@@ -2,6 +2,8 @@
 #include "cmdline.h"
 #include "compiler.h"
 #include "program.h"
+#include "strings.h"
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -37,6 +39,9 @@ int main(int argc, char *argv[]) {
     // arg: --debug / -d
     parser.add("debug", 'd', "Enable the macro `DEBUG` for your program. (Not by default)");
 
+    // arg: --no-color
+    parser.add("no-color", 0, "This program's output will be without colors. (Colorful by default)");
+
     parser.footer("source-files [--] [args]");
     parser.set_program_name("runner");
 
@@ -51,6 +56,11 @@ int main(int argc, char *argv[]) {
 
     // do parser
     parser.parse_check(idx_of_double_stash, argv);
+
+    // color be the first
+    if (parser.exist("no-color")) {
+        string_wrapper::set_no_color_mode();
+    }
 
     // `--help` => exit
     if (parser.exist("help")) {
@@ -98,8 +108,7 @@ int main(int argc, char *argv[]) {
     std::string c_compiler = parser.get<std::string>("compiler");
     if (c_compiler != "auto") {
         if (!compile::exist(c_compiler)) {
-            // TODO: error
-            std::cerr << "Compiler " << c_compiler << " not exists!" << std::endl;
+            std::cerr << string_wrapper::error(string_compile::not_available, c_compiler) << std::endl;
             return 1;
         }
     } else {
@@ -110,8 +119,7 @@ int main(int argc, char *argv[]) {
     // compile
     bool ret_compile = compile::compile(sources, c_flags, c_compiler);
     if (!ret_compile) {
-        // TODO: error
-        std::cerr << "Compile Error!" << std::endl;
+        std::cerr << string_wrapper::error(string_user::error_compile) << std::endl;
         return 1;
     }
 
@@ -126,17 +134,17 @@ int main(int argc, char *argv[]) {
         // for linux
         int ret_value = (exit_code >> 8) & 0xFF;
         int ret_sig = exit_code & 0x7F;
-        // TODO: error
-        std::cerr << "Runtime Error!" << std::endl;
+        std::cerr << string_wrapper::error(string_user::error_runtime) << std::endl;
         if (ret_value) {
-            std::cerr << "/ Return value: " << ret_value << std::endl;
+            std::cerr << string_wrapper::error(string_user::info_return_val, ret_value) << std::endl;
         }
         if (ret_sig) {
-            std::cerr << "/ Return signal: " << ret_sig << std::endl;
+            std::cerr << string_wrapper::error(string_user::info_return_sig, ret_sig) << std::endl;
         }
         return 1;
     }
-    std::cout << "The program exits successfully!" << std::endl;
+
+    std::cout << string_wrapper::info(string_user::info_exit_0) << std::endl;
 
     return 0;
 }
