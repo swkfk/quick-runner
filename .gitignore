@@ -1,5 +1,7 @@
 *.o
 *.out
+*.win
+*.exe
 runner
 test/
 .vscode/
