@@ -1,6 +1,6 @@
 # C/C++ Quick Runner [In early development stage]
 
-**Released: 2023/08/05**
+**Released: 2023/08/06**
 
 A simple and quick C/C++ runner. It is more a piece of script than a program.
 
@@ -26,9 +26,9 @@ make install
 
 to make the program can be called globally.
 
-~~For Windows, you can also use `git clone` to get the source file and build it with `make` or other compiler. But you may need to set the program to the `%PATH%` manually.~~
+For Windows, you can also use `git clone` to get the source file and build it with `mingw32-make PLATFORM=win` or other tool-chains. But you may need to set the program to the `%PATH%` manually (`make install` is not supported on Windows).
 
-It is a pity that, it is hard to supprot Windows now, because I use some Unix functions in this project. I will learn the Windows Programming if I were free to make it work on Windows.
+It is a pity that, it is hard to supprot Windows fully now, because I use some Unix functions in this project. I will learn the Windows Programming if I were free to make it work on Windows as great as on Linux.
 
 ## Usage
 
@@ -46,6 +46,7 @@ runner [options] source-files [--] [args]
     - If the compiler is not found, the program will exit with an error.
     - To **add a parameter**, you can use `-c gcc` or `--compiler g++` or `--compiler=clang`. The following options that need parameters have the same behavior.
   - `-t`, `--time-limit`    Limit the run time of your program. If `0` is given, there will be no limits.
+    - This argument will be ignored on Windows.
     - Need an int parameter to specify the time limit.
     - Your program will be killed with the `SIGALRM(14)` if TLE.
     - Pay attention that, the input time will be calulated in the total time. So it's better to use this option with the `--input`.
@@ -63,6 +64,12 @@ runner [options] source-files [--] [args]
   Everything after the `--` will be passed to the program.
 
 ## What's new
+
+### [early]v1.0.0
+
+Add a simple support for Windows! Although the "--time-limit" argument will be ignored and `Ctrl-C` will kill this program along with your program.
+
+The compiler detect function has not been supported yet, but the version starts with a `1`. This is because that, it can run on Windows now and its basic functions are finished.
 
 ### [early] v0.0.6
 

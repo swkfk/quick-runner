@@ -8,6 +8,10 @@ const char *info_return_val = "| Return value: ";
 const char *info_return_sig = "| Return signal: ";
 const char *info_exit_0 = "The program exits successfully!";
 
+#ifdef _WINDOWS
+const char *warn_unsupport_tle = "The `tle` tool is not supported in Windows now. The request will be ignored!";
+#endif
+
 } // namespace string_user
 
 namespace string_compile {
@@ -76,6 +80,10 @@ std::string info(const char *s) {
 
 template <typename T> std::string info(const char *s, const T quote) {
     return base(C_INFO, s, quote);
+}
+
+std::string warn(const char *s) {
+    return base(C_WARN, s);
 }
 
 std::string error(const char *s) {

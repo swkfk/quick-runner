@@ -1,10 +1,12 @@
 #ifndef __BASEINFO_H__
 #define __BASEINFO_H__
 
+#include "platform.h"
+
 #include <string>
 
 namespace baseinfo {
-const std::string version = "0.0.6";
+const std::string version = "1.0.0";
 const std::string bulit_date = __DATE__;
 const std::string bulit_time = __TIME__;
 
@@ -15,14 +17,14 @@ const std::string compiler = "LLVM clang++";
 #elif defined(__GNUC__)
 const std::string compiler = "GNU g++";
 #else
-const std::string compiler = "unknown";
+const std::string compiler = "Unknown";
 #endif
 
-#if defined(WIN32) || defined(_WIN32) || defined(_WIN32_) || defined(WIN64) || defined(_WIN64) || defined(_WIN64_)
+#ifdef _WINDOWS
 const std::string platform = "Windows";
-#elif defined(__linux__)
+#elif defined(_LINUX)
 const std::string platform = "Linux";
-#elif defined(__APPLE__) || defined(TARGET_OS_MAC)
+#elif defined(_MACOS)
 const std::string platform = "Mac";
 #else
 const std::string platform = "Unknown";

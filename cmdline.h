@@ -30,7 +30,9 @@
 #include <algorithm>
 #include <cstdlib>
 #include <cstring>
-#include <cxxabi.h>
+#ifndef _MSC_VER
+#include <cxxabi.h> // MSVC not support!
+#endif
 #include <iostream>
 #include <map>
 #include <sstream>
@@ -82,20 +84,28 @@ template <typename Target> class lexical_cast_t<Target, std::string, false> {
     }
 };
 
-template <typename T1, typename T2> struct is_same { static const bool value = false; };
+template <typename T1, typename T2> struct is_same {
+    static const bool value = false;
+};
 
-template <typename T> struct is_same<T, T> { static const bool value = true; };
+template <typename T> struct is_same<T, T> {
+    static const bool value = true;
+};
 
 template <typename Target, typename Source> Target lexical_cast(const Source &arg) {
     return lexical_cast_t<Target, Source, detail::is_same<Target, Source>::value>::cast(arg);
 }
 
 static inline std::string demangle(const std::string &name) {
+#ifdef _MSC_VER
+    return name;
+#else
     int status = 0;
     char *p = abi::__cxa_demangle(name.c_str(), 0, 0, &status);
     std::string ret(p);
     free(p);
     return ret;
+#endif
 }
 
 template <class T> std::string readable_typename() {

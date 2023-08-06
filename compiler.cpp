@@ -1,5 +1,7 @@
 #include "compiler.h"
 
+#ifdef _UNIX
+
 namespace compile::pipe {
 
 FILE *open(const char *cmd, const char *modes = "r") {
@@ -51,9 +53,12 @@ int close(FILE *pipe) {
 
 } // namespace compile::pipe
 
+#endif // _UNIX
+
 namespace compile {
 
 bool exist(const std::string &id) {
+#ifdef _UNIX
     FILE *pipe = pipe::open(id + " --version 2>&1");
     if (!pipe) {
         return false;
@@ -61,21 +66,26 @@ bool exist(const std::string &id) {
     pipe::clear(pipe);
     int ret = pipe::close(pipe);
     return WIFEXITED(ret) && !WEXITSTATUS(ret);
+#else // _UNIX ^^^ ; vvv _WINDOWS
+    // A simple way to implement the goal
+    int ret = system((id + " --version>nul").c_str());
+    return ret == 0;
+#endif
 }
 
-bool exist(const std::string &id, std::string &version) {
-    FILE *pipe = pipe::open(id + " --version 2>&1");
-    if (!pipe) {
-        return false;
-    }
-    pipe::read_line(pipe, version);
-    int ret = pipe::close(pipe);
-    return WIFEXITED(ret) && !WEXITSTATUS(ret);
-}
+// bool exist(const std::string &id, std::string &version) {
+//     FILE *pipe = pipe::open(id + " --version 2>&1");
+//     if (!pipe) {
+//         return false;
+//     }
+//     pipe::read_line(pipe, version);
+//     int ret = pipe::close(pipe);
+//     return WIFEXITED(ret) && !WEXITSTATUS(ret);
+// }
 
 bool compile(const std::vector<std::string> &inputs, const std::vector<std::string> &flags,
              const std::string &compile) {
-
+    // return whether success
     std::string cmd = compile;
     for (auto &s : inputs) {
         cmd += " " + s;
@@ -83,7 +93,7 @@ bool compile(const std::vector<std::string> &inputs, const std::vector<std::stri
     for (auto &s : flags) {
         cmd += " " + s;
     }
-
+#ifdef _UNIX
     FILE *pipe = compile::pipe::open(cmd + " 2>&1", "w");
     if (!pipe) {
         return false;
@@ -91,6 +101,10 @@ bool compile(const std::vector<std::string> &inputs, const std::vector<std::stri
 
     int ret = pipe::close(pipe);
     return WIFEXITED(ret) && !WEXITSTATUS(ret);
+#else
+    int ret = system(cmd.c_str());
+    return ret == 0;
+#endif
 }
 
 } // namespace compile

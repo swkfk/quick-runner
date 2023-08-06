@@ -1,11 +1,16 @@
 #include "program.h"
 
 #include <iostream>
-#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+#ifdef _UNIX
+#include <signal.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#endif
+
+#ifdef _UNIX
 
 static int child_program_status, child_pid;
 
@@ -30,17 +35,25 @@ void sigint_handler(int sig) {
     }
 }
 
+#endif // _UNIX
+
 namespace program {
 
 int run(const std::vector<std::string> &args, int time_limit, const std::string &input) {
-    // TODO: modify the exec name
+    // return the exit_code
+// TODO: modify the exec name
+#ifdef _UNIX
     std::string cmd = "./a.out";
+#else
+    std::string cmd = "a.exe";
+#endif
     for (auto &s : args) {
         cmd += " \"" + s + "\"";
     }
 
     bool has_input = input != "";
 
+#ifdef _UNIX
     // child to parent or parent to child
     // if `input` is specified, the fd_ptc will be used to fetch the file content
     // at any situation, the fd_ctp will be used
@@ -109,6 +122,16 @@ int run(const std::vector<std::string> &args, int time_limit, const std::string 
         }
         exit((ret >> 8) & 0xFF);
     }
+#else // _UNIX ^^^ ; vvv _WINDOWS
+    if (time_limit) {
+        std::cerr << string_wrapper::warn(string_user::warn_unsupport_tle) << std::endl;
+    }
+    if (has_input) {
+        cmd += "<" + input;
+    }
+    int ret = system(cmd.c_str());
+    return ret;
+#endif
 }
 
 }; // namespace program

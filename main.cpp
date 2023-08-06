@@ -131,16 +131,21 @@ int main(int argc, char *argv[]) {
     }
 
     if (exit_code) {
-        // for linux
+#ifdef _UNIX
         int ret_value = (exit_code >> 8) & 0xFF;
         int ret_sig = exit_code & 0x7F;
+#else
+        int ret_value = exit_code;
+#endif
         std::cerr << string_wrapper::error(string_user::error_runtime) << std::endl;
         if (ret_value) {
             std::cerr << string_wrapper::error(string_user::info_return_val, ret_value) << std::endl;
         }
+#ifdef _UNIX
         if (ret_sig) {
             std::cerr << string_wrapper::error(string_user::info_return_sig, ret_sig) << std::endl;
         }
+#endif
         return 1;
     }
 
