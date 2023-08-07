@@ -1,14 +1,20 @@
-# C/C++ Quick Runner [In early development stage]
+# C/C++ Quick Runner [早期开发阶段 / In early development stage]
 
-**Released: 2023/08/07**
+这是一个简单快速的 C/C++ 运行程序，不过，与其说是一个 “程序”，倒不如说是一段 “脚本”。
 
 A simple and quick C/C++ runner. It is more a piece of script than a program.
 
-The runner **does not** provide a compiler. But it can detect the `gcc/g++` or `clang/clang++` installed by you and use them autometically.
+这个运行程序 **并没有** 提供一个编译器，但是它可以自行检测可用的 `gcc/g++` 或者是 `clang/clang++` 来进行编译（尚未实现）。
+
+The runner **does not** provide a compiler. But it can detect the `gcc/g++` or `clang/clang++` installed by you and use them autometically (Not available yet).
+
+在编译运行程序的时候，我也提供了一些有用的选项，比如运行时间的限制等等。
 
 I also provide some useful options to run the program, such as "time-limit".
 
-## Install
+## 安装 / Install
+
+对于 Linux 系统，你可以使用：
 
 For Linux, use
 
@@ -18,13 +24,19 @@ cd ~/quick-runner
 make
 ```
 
+来克隆代码仓库，并且使用 make 进行构建，同时，你也可以使用
+
 to clone the repo and build the program or use
 
 ``` shell
 make install
 ```
 
+来将其添加到全局目录。
+
 to make the program can be called globally.
+
+对于 Windows 系统，你也可以使用 `git clone` 来获取源代码，并使用下列指令进行编译。
 
 For Windows, you can also use `git clone` to get the source file and build it with 
 
@@ -32,17 +44,44 @@ For Windows, you can also use `git clone` to get the source file and build it wi
 mingw32-make PLATFORM=win
 ```
 
+当然，其他工具链也没有问题。但是你必须手动将其添加到系统的环境变量（如果你想全局使用的话，`make install` 不支持 Windows 系统）。
+
 or other tool-chains. But you may need to set the program to the `%PATH%` manually (`make install` is not supported on Windows).
+
+很遗憾的是，在 Windows 中支持此程序的全部功能是挺困难的，因为我在原始程序中使用了很多 Unix 特有的函数 / 系统调用。但如果我有空的话，我会学习并使用 Windows 核心编程的相关内容来使其支持所有应有的功能。
 
 It is a pity that, it is hard to supprot Windows fully now, because I use some Unix functions in this project. I will learn the Windows Programming if I were free to make it work on Windows as great as on Linux.
 
-## Usage
+## 用法 / Usage
 
 ``` bash
 runner [options] source-files [--] [args]
 ```
 
-- options:
+---
+
+- 选项 / `options`:
+
+  - `-V`,` --version`    展示程序版本信息，并退出。
+  - `-?`, `--help`       展示帮助信息（英文），并退出。
+  - `-c`, `--compiler`   选择编译器，如果不指定，将默认为 `auto`（当前版本还不支持自动探测功能，`auto` 实际上为 `gcc`）。
+    - 需要一个参数：选项中的字符串，用来指定编译器；
+    - 你只能基于下列五项参数： `gcc`, `g++`, `clang`, `clang++`, `auto`（默认）；
+    - 如果指定的编译器没有找到，程序将会退出，并返回错误码；
+    - 为了 **给选项设定参数**，你可以采用以下三种途径： `-c gcc`，`--compiler g++`，`--compiler=clang`. 后续需要参数的选项都遵循着相同的格式。
+  - `-t`, `--time-limit`    限制程序运行的时间，如果设为 `0`（默认），则为无限制。
+    - **该选项将在 Windows 系统中被忽略**；
+    - 需要一个参数：0 ~ 1000 的一个整数，用来限制程序运行时间（单位：秒）；
+    - 如果运行超时，你的程序将会被信号 `SIGALRM(14)` 终止；
+    - 请格外注意，等待输入也会被计算时间，因此，你最好使用 `--input` 进行输入。
+  - `-i`, `--input`    指定用来代替 `stdin` 的文件。
+    - 需要一个参数：代表文件路径的字符串；
+    - 对于 Linux 系统，当文件不存在时，程序将会退出并返回错误码。
+  - `-k`, `--keep`     如果这个选项存在，编译后的程序在运行结束后将 **不** 会被删除。
+  - `-d`, `--debug`    如果这个选项存在，将会在编译时给你的程序添加 `DEBUG` 宏（通过 `-DDEBUG` 编译选项）以方便调试。
+  - `--no-color`       如果这个选项存在，程序将不会输出彩色文字。
+
+---
 
   - `-V`,` --version`    Show the version information and exit.
   - `-?`, `--help`       Show the help message and exit.
@@ -61,15 +100,29 @@ runner [options] source-files [--] [args]
   - `-k`, `--keep`          If this option exists, the binary file generated will be kept after running it instead of deleting it.
   - `-d`, `--debug`         Enable the macro `DEBUG` for your program.
   - `--no-color`            Dismiss the colorful output.
-- source-files:
+
+---
+
+- 源文件 / `source-files`:
+
+  源文件列表，使用空格隔开。
 
   The lists of the source files.
 
-- -- args:
+- 运行参数 / `-- args`:
+
+  `--` 之后的全部内容将被传递给子程序，不同参数间使用空格隔开
 
   Everything after the `--` will be passed to the program.
 
-## What's new
+## 更新日志 / What's new
+
+### [early] v1.0.2
+
+为 `README.md` 中的描述性信息增加了中文！
+
+Add **Chinese** support for the descriptive information in the  `README.md`!
+
 
 ### [early] v1.0.1
 
@@ -118,7 +171,7 @@ Add the `--compiler` or `-c` option to specify the compiler. Now the program has
 
 The `--help` and `--version` are available now. The program starts to use `cmdline` the project to handle the arguments.
 
-## Third-Party License
+## 第三方 License / Third-Party License
 
 - cmdline.h
   - By: Hideyuki Tanaka

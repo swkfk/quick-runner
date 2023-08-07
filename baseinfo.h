@@ -6,7 +6,7 @@
 #include <string>
 
 namespace baseinfo {
-const std::string version = "1.0.1";
+const std::string version = "1.0.2";
 const std::string bulit_date = __DATE__;
 const std::string bulit_time = __TIME__;
 
