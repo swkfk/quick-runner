@@ -97,7 +97,8 @@ int run(const std::vector<std::string> &args, int time_limit, const std::string 
                 // TODO: tle error
                 kill(child_pid, SIGALRM); // It's important to kill first
                 usleep(100000);           // And this
-                std::cerr << "Time Limit Exceeded! (" << time_limit << "s)" << std::endl;
+                // std::cerr << "Time Limit Exceeded! (" << time_limit << "s)" << std::endl;
+                std::cerr << string_wrapper::info("Time Limit Exceeded! (", time_limit, "s)") << std::endl;
             }
 
             // check whether the child is over

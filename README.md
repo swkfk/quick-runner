@@ -1,6 +1,6 @@
 # C/C++ Quick Runner [In early development stage]
 
-**Released: 2023/08/06**
+**Released: 2023/08/07**
 
 A simple and quick C/C++ runner. It is more a piece of script than a program.
 
@@ -12,7 +12,7 @@ I also provide some useful options to run the program, such as "time-limit".
 
 For Linux, use
 
-``` bash
+``` shell
 git clone https://github.com/swkfk/quick-runner.git ~/quick-runner
 cd ~/quick-runner
 make
@@ -20,13 +20,19 @@ make
 
 to clone the repo and build the program or use
 
-``` bash
+``` shell
 make install
 ```
 
 to make the program can be called globally.
 
-For Windows, you can also use `git clone` to get the source file and build it with `mingw32-make PLATFORM=win` or other tool-chains. But you may need to set the program to the `%PATH%` manually (`make install` is not supported on Windows).
+For Windows, you can also use `git clone` to get the source file and build it with 
+
+``` shell
+mingw32-make PLATFORM=win
+```
+
+or other tool-chains. But you may need to set the program to the `%PATH%` manually (`make install` is not supported on Windows).
 
 It is a pity that, it is hard to supprot Windows fully now, because I use some Unix functions in this project. I will learn the Windows Programming if I were free to make it work on Windows as great as on Linux.
 
@@ -57,7 +63,7 @@ runner [options] source-files [--] [args]
   - `--no-color`            Dismiss the colorful output.
 - source-files:
 
-  The lists of the source files
+  The lists of the source files.
 
 - -- args:
 
@@ -65,7 +71,16 @@ runner [options] source-files [--] [args]
 
 ## What's new
 
-### [early]v1.0.0
+### [early] v1.0.1
+
+Some bugs are fixed:
+
+- The binary will not be removed on Windows.
+- The "Time Limit Exceeded" string has no color.
+- Extra blanks in strings.
+- Some typos in strings and `README.md`.
+
+### [early] v1.0.0
 
 Add a simple support for Windows! Although the "--time-limit" argument will be ignored and `Ctrl-C` will kill this program along with your program.
 
@@ -77,11 +92,11 @@ Now the output will be colorful! But you can also change to the "no-color" mode 
 
 ### [early] v0.0.5
 
-Add the `--debug` or `-d` option to enable the DEBUG mode for your program via the macro `BEBUG`.
+Add the `--debug` or `-d` option to enable the DEBUG mode for your program via the macro `DEBUG`.
 
 ### [early] v0.0.4
 
-Add the `--input` or `-i` option to specify the file whose content will be send to your program. In this version, the program will not check the existence of the input file.
+Add the `--input` or `-i` option to specify the file whose content will be send to your program's stdin. In this version, the program will not check the existence of the input file.
 
 Add the `--keep` or `-k` option. If this option exists, the binary generated will not be removed after running it.
 

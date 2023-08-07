@@ -33,6 +33,7 @@ void set_no_color_mode();
 
 std::string info(const char *s);
 template <typename T> std::string info(const char *s, const T quote);
+template <typename T> std::string info(const char *pre, const T quote, const char *post);
 
 std::string warn(const char *s);
 

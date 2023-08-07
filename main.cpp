@@ -127,7 +127,11 @@ int main(int argc, char *argv[]) {
     int exit_code = program::run(args, option_time_limit, option_input);
 
     if (!option_keep) {
+#ifdef _UNIX
         remove("./a.out");
+#else
+        remove("a.exe");
+#endif
     }
 
     if (exit_code) {

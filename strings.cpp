@@ -4,20 +4,20 @@ namespace string_user {
 
 const char *error_compile = "Compile error!";
 const char *error_runtime = "Runtime error!";
-const char *info_return_val = "| Return value: ";
-const char *info_return_sig = "| Return signal: ";
+const char *info_return_val = "| Return value:";
+const char *info_return_sig = "| Return signal:";
 const char *info_exit_0 = "The program exits successfully!";
 
 #ifdef _WINDOWS
-const char *warn_unsupport_tle = "The `tle` tool is not supported in Windows now. The request will be ignored!";
+const char *warn_unsupport_tle = "The `tle` function is not supported on Windows now. The request will be ignored!";
 #endif
 
 } // namespace string_user
 
 namespace string_compile {
 
-const char *auto_detect = "Auto detected compiler: ";
-const char *not_available = "Error! Compiler not available: ";
+const char *auto_detect = "Auto detected compiler:";
+const char *not_available = "Error! Compiler not available:";
 
 } // namespace string_compile
 
@@ -57,9 +57,9 @@ std::string base(const char *base_color, const char *s) {
 template <typename T> std::string base(const char *base_color, const char *prefix, T quote) {
     std::ostringstream oss;
     if (!_no_color_mode) {
-        oss << base_color << prefix << "`" << C_QUOTE << quote << base_color << "`" << RESET;
+        oss << base_color << prefix << " " << C_QUOTE << quote << base_color << " " << RESET;
     } else {
-        oss << prefix << "`" << quote << "`";
+        oss << prefix << " " << quote << " ";
     }
     return oss.str();
 }
@@ -67,9 +67,9 @@ template <typename T> std::string base(const char *base_color, const char *prefi
 template <typename T> std::string base(const char *base_color, const char *prefix, T quote, const char *postfix) {
     std::ostringstream oss;
     if (!_no_color_mode) {
-        oss << base_color << prefix << "`" << C_QUOTE << quote << base_color << "`" << postfix << RESET;
+        oss << base_color << prefix << " " << C_QUOTE << quote << base_color << " " << postfix << RESET;
     } else {
-        oss << prefix << "`" << quote << "`" << postfix;
+        oss << prefix << " " << quote << " " << postfix;
     }
     return oss.str();
 }
@@ -80,6 +80,10 @@ std::string info(const char *s) {
 
 template <typename T> std::string info(const char *s, const T quote) {
     return base(C_INFO, s, quote);
+}
+
+template <typename T> std::string info(const char *pre, const T quote, const char *post) {
+    return base(C_INFO, pre, quote, post);
 }
 
 std::string warn(const char *s) {
@@ -94,9 +98,10 @@ template <typename T> std::string error(const char *s, const T quote) {
     return base(C_ERROR, s, quote);
 }
 
-template std::string info(const char *s, const char *);
-template std::string error(const char *s, const char *);
-template std::string error(const char *s, const int);
-template std::string error(const char *s, const std::string);
+template std::string info(const char *, const char *);
+template std::string info(const char *, const int, const char *);
+template std::string error(const char *, const char *);
+template std::string error(const char *, const int);
+template std::string error(const char *, const std::string);
 
 } // namespace string_wrapper
