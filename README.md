@@ -64,7 +64,7 @@ runner [options] source-files [--] [args]
 
   - `-V`,` --version`    展示程序版本信息，并退出。
   - `-?`, `--help`       展示帮助信息（英文），并退出。
-  - `-c`, `--compiler`   选择编译器，如果不指定，将默认为 `auto`（当前版本还不支持自动探测功能，`auto` 实际上为 `gcc`）。
+  - `-c`, `--compiler`   选择编译器，如果不指定，将默认为 `auto`（对于 C++，检测顺序为 `g++`，`clang++`；对于 C，检测顺序为 `gcc`，`clang`）。
     - 需要一个参数：选项中的字符串，用来指定编译器；
     - 你只能基于下列五项参数： `gcc`, `g++`, `clang`, `clang++`, `auto`（默认）；
     - 如果指定的编译器没有找到，程序将会退出，并返回错误码；
@@ -85,7 +85,7 @@ runner [options] source-files [--] [args]
 
   - `-V`,` --version`    Show the version information and exit.
   - `-?`, `--help`       Show the help message and exit.
-  - `-c`, `--compiler`   Choose the compiler. If `auto` is given, the usable and suitable compiler will be chosen (This version will use `gcc` by default).
+  - `-c`, `--compiler`   Choose the compiler. If `auto` is given, the usable and suitable compiler will be chosen (The sequence is `g++`, `clang++` for C++ and `gcc`, `clang` for C).
     - Need a string parameter to specify the compiler.
     - The choices are: `gcc`, `g++`, `clang`, `clang++`, `auto`(dufault).
     - If the compiler is not found, the program will exit with an error.
@@ -116,6 +116,13 @@ runner [options] source-files [--] [args]
   Everything after the `--` will be passed to the program.
 
 ## 更新日志 / What's new
+
+### [early] v1.0.3
+
+支持 auto 自动检测，能够对 C、C++ 文件调用不同的编译器。
+
+Can detect the compiler (auto mode) now!
+
 
 ### [early] v1.0.2
 

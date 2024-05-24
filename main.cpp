@@ -112,8 +112,37 @@ int main(int argc, char *argv[]) {
             return 1;
         }
     } else {
-        // TODO: C or CPP
-        c_compiler = "gcc";
+        bool cpp = false;
+        for (auto sourse : sources) {
+            auto dot_pos = sourse.rfind(".");
+            if (dot_pos == std::string::npos) {
+                continue;
+            }
+            auto extension = sourse.substr(dot_pos + 1);
+            if (extension == "cpp") {
+                cpp = true;
+                break;
+            }
+        }
+        if (cpp) {
+            if (compile::exist("g++")) {
+                c_compiler = "g++";
+            } else if (compile::exist("clang++")) {
+                c_compiler = "clang++";
+            } else {
+                std::cerr << string_wrapper::error(string_compile::not_available, "g++ or clang++") << std::endl;
+                return 1;
+            }
+        } else {
+            if (compile::exist("gcc")) {
+                c_compiler = "gcc";
+            } else if (compile::exist("clang")) {
+                c_compiler = "clang";
+            } else {
+                std::cerr << string_wrapper::error(string_compile::not_available, "gcc or clang") << std::endl;
+                return 1;
+            }
+        }
     }
 
     // compile
